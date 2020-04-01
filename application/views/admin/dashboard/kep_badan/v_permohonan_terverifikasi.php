@@ -1,0 +1,321 @@
+ <!-- Menu -->
+<?=$header;?>
+<!-- End Menu -->
+
+<?php if ($this->session->flashdata('ver')){ ?>
+        <script>
+            swal({
+                title: "Terverifikasi",
+                text: "Berhasil Verifikasi Permohonan",
+                timer: 3000,
+                showConfirmButton : true,
+                type : "success",
+                icon: "success"
+            });
+        </script>
+
+      <?php }?>
+
+        <!-- Isi Konten Disini -->
+        <div class="right_col" role="main">
+        
+          <h3> Data Permohonan Telah Diverifikasi</h3>
+          <hr>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+
+
+         <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Surat Balasan </th>
+                <th>Status</th>
+                <th>Jenis Surat</th>
+                <th>NIK Pemohon</th>
+                <th>Tanggal Upload</th>
+                <th>Foto</th>
+                <th>Scan KTP</th>
+                <th>Scan KTM</th>
+                <th>File Proposal</th>
+                <th>File Surat</th>
+                <th>Akta Notaris</th>
+                <th>Ket Tidak Sengketa</th>
+                <th>Domisili Ormas</th>
+                <th>Pengurus</th>
+                <th>Progja</th>
+                <th>Ket Kementrian</th>
+                <th>Izin Tinggal</th>
+                <th>Tanda Lapor</th>
+              </tr>
+            </thead>
+
+           
+
+            <?php if(is_array($data_permohonan)){ ?>
+             <?php $no = 1;?>
+             <?php foreach($data_permohonan as $dt) : ?>
+             <tbody>
+              <tr>
+              <td class="center"> <?=$no?></td>
+              <td class="center"> 
+
+                
+                  <?php if ($dt->jenis_surat == 'Izin Riset'){?>
+                  <?php if (!has_id_izin($dt->id_surat_pengantar)) { ?>
+
+                  <form action = "<?php echo base_url()?>admin/buat_balasan_izin" method="POST">
+                  <input type="hidden" name="id_surat" value="<?=$dt->id_surat_pengantar?>">
+                  <input type="hidden" name="nik" value="<?=$dt->nik_pemohon?>">
+                  <button class="btn btn-success btn-sm" type="submit"> <i class="fa fa-edit"> </i> &nbsp; Buat</button>
+                  </form>
+                 <?php } else { ?>   
+                 <form action = "<?php echo base_url()?>admin/edit_balasan_izin" method="POST">
+                  <input type="hidden" name="id_surat" value="<?=$dt->id_surat_pengantar?>">
+                  <input type="hidden" name="nik" value="<?=$dt->nik_pemohon?>">
+                  <button class="btn btn-primary btn-sm" type="submit"> <i class="fa fa-edit"> </i> &nbsp; Ubah</button>
+                  </form>       
+                 <?php } ?>          
+
+                 <?php } else if ($dt->jenis_surat == 'Keberadaan Ormas') { ?>
+                   <?php if (!has_id_ormas($dt->id_surat_pengantar)) { ?>
+
+                  <form action = "<?php echo base_url()?>admin/buat_balasan_ormas" method="POST">
+                  <input type="hidden" name="id_surat" value="<?=$dt->id_surat_pengantar?>">
+                  <input type="hidden" name="nik" value="<?=$dt->nik_pemohon?>">
+                  <button class="btn btn-success btn-sm" type="submit"> <i class="fa fa-edit"> </i> &nbsp; Buat</button>
+                  </form>
+                 <?php } else { ?>   
+                 <form action = "<?php echo base_url()?>admin/edit_balasan_ormas" method="POST">
+                  <input type="hidden" name="id_surat" value="<?=$dt->id_surat_pengantar?>">
+                  <input type="hidden" name="nik" value="<?=$dt->nik_pemohon?>">
+                  <button class="btn btn-primary btn-sm" type="submit"> <i class="fa fa-edit"> </i> &nbsp; Ubah</button>
+                  </form>       
+                 <?php } ?>     
+
+                   <?php } else if ($dt->jenis_surat == 'Lapor WNA') { ?>
+                   <?php if (!has_id_wna($dt->id_surat_pengantar)) { ?>
+
+                  <form action = "<?php echo base_url()?>admin/buat_balasan_wna" method="POST">
+                  <input type="hidden" name="id_surat" value="<?=$dt->id_surat_pengantar?>">
+                  <input type="hidden" name="nik" value="<?=$dt->nik_pemohon?>">
+                  <button class="btn btn-success btn-sm" type="submit"> <i class="fa fa-edit"> </i> &nbsp; Buat</button>
+                  </form>
+                 <?php } else { ?>   
+                 <form action = "<?php echo base_url()?>admin/edit_balasan_wna" method="POST">
+                  <input type="hidden" name="id_surat" value="<?=$dt->id_surat_pengantar?>">
+                  <input type="hidden" name="nik" value="<?=$dt->nik_pemohon?>">
+                  <button class="btn btn-primary btn-sm" type="submit"> <i class="fa fa-edit"> </i> &nbsp; Ubah</button>
+                  </form>       
+                 <?php } ?>            
+                 <?php } ?>            
+
+
+
+             
+
+              </td> 
+              <td class="center"> <?=$dt->status?></td>
+              <td class="center"> <?=$dt->jenis_surat?></td>
+              <td class="center"> <?=$dt->nik_pemohon?></td>
+              <td class="center"> <?=$dt->tgl_upload?></td>
+              <td class="center">
+                        <?php if ($dt->jenis_surat == 'Lapor WNA'){?>
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->foto ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp; Lihat Foto</a>
+                        <?php } else if ($dt->jenis_surat == 'Keberadaan Ormas') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->foto ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat Foto</a>
+                        <?php } else if ($dt->jenis_surat == 'Izin Riset') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_izin/'.$dt->foto ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat Foto</a>
+                        <?php } ?>
+              </td>
+              <td class="center">
+              	        <?php if ($dt->jenis_surat == 'Lapor WNA'){?>
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->file_ktp ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp; Lihat KTP</a>
+                        <?php } else if ($dt->jenis_surat == 'Keberadaan Ormas') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->file_ktp ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat KTP</a>
+                        <?php } else if ($dt->jenis_surat == 'Izin Riset') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_izin/'.$dt->file_ktp ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat KTP</a>
+                        <?php } ?>
+              </td>
+              <td class="center"> 
+              <?php if ($dt->file_ktm == '') { ?>
+                        -
+
+                        <?php } else { ?>
+
+                        <?php if ($dt->jenis_surat == 'Lapor WNA'){?>
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->file_ktm ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp; Lihat KTM</a>
+                        <?php } else if ($dt->jenis_surat == 'Keberadaan Ormas') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->file_ktm ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat KTM</a>
+                        <?php } else if ($dt->jenis_surat == 'Izin Riset') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_izin/'.$dt->file_ktm ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat KTM</a>
+                        <?php } ?>
+
+
+                        <?php } ?></td>
+              <td class="center"> 
+                <?php if ($dt->jenis_surat == 'Lapor WNA'){?>
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->file_proposal ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp; Lihat Proposal</a>
+                        <?php } else if ($dt->jenis_surat == 'Keberadaan Ormas') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->file_proposal ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat Proposal</a>
+                        <?php } else if ($dt->jenis_surat == 'Izin Riset') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_izin/'.$dt->file_proposal ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat Proposal</a>
+                        <?php } ?>
+                    </td>
+              <td class="center"> 
+              	   <?php if ($dt->jenis_surat == 'Lapor WNA'){?>
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->file_surat ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp; Lihat Surat</a>
+                        <?php } else if ($dt->jenis_surat == 'Keberadaan Ormas') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->file_surat ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Syarat Ormas</a>
+                        <?php } else if ($dt->jenis_surat == 'Izin Riset') { ?>
+                        <a href="<?php echo base_url().'/file/syarat_izin/'.$dt->file_surat ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Syarat Izin</a>
+                        <?php } ?>
+             </td>
+
+             <td class="center"> 
+                     <?php if ($dt->akta_notaris == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->akta_notaris ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Lihat Akta</a>
+
+                        <?php } ?>
+                    </td>
+
+                    <td class="center"> 
+                     <?php if ($dt->sengketa == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->sengketa ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Tidak Sengketa</a>
+
+                        <?php } ?>
+                    </td>
+
+                    <td class="center"> 
+                     <?php if ($dt->domisili_ormas == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->domisili_ormas ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Domisili</a>
+
+                        <?php } ?>
+                    </td>
+
+                   <td class="center"> 
+                     <?php if ($dt->susunan_pengurus == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->susunan_pengurus ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Pengurus</a>
+
+                        <?php } ?>
+                    </td>
+
+
+                   <td class="center"> 
+                     <?php if ($dt->program_kerja == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_ormas/'.$dt->program_kerja ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Progja</a>
+
+                        <?php } ?>
+                    </td>
+
+                   <td class="center"> 
+                     <?php if ($dt->ket_kementrian == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->ket_kementrian ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Kementrian</a>
+
+                        <?php } ?>
+                    </td>
+
+                    <td class="center"> 
+                     <?php if ($dt->izin_tinggal == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->izin_tinggal ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Izin</a>
+
+                        <?php } ?>
+                    </td>
+
+                     <td class="center"> 
+                     <?php if ($dt->tanda_lapor == '') { ?>
+                        -
+                        <?php } else { ?>                    
+                        <a href="<?php echo base_url().'/file/syarat_wna/'.$dt->tanda_lapor ?>" target="_BLANK"> <i class="fa fa-file"> </i> &nbsp;  Tanda Lapor</a>
+
+                        <?php } ?>
+                    </td>
+
+              </tr>
+             <?php $no++; ?>
+             <?php endforeach; ?>
+             <?php } ?>
+          </table>
+
+          </div>
+          </div>
+          </div>
+          </div>
+
+
+        <!-- End Konten  -->
+
+
+<!-- Modal -->
+
+ <?php if(is_array($data_permohonan)){ ?>
+ <?php foreach($data_permohonan as $dt) : ?>
+      
+        
+        <div class="modal fade" id="modal_batal<?php echo $dt->id_surat_pengantar;?>" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog  modal-md modal-dialog-centered " role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Verifikasi Permohonan</h4>
+                </div>
+
+                <form action ="<?php echo base_url()?>admin/batal_verifikasi" method="POST">
+                <input type="hidden" value="<?=$dt->id_surat_pengantar?>" name="id_surat">
+                <div class="modal-body  pr-4 pl-4">
+                  <div class="radio">
+                  <label style="font-weight: bold; font-size: 14px">  Anda Yakin Akan Batalkan Verifikasi ?  
+                  </label> &nbsp;
+                <button class="btn btn-danger">Batalkan Verifikasi</button>
+                </div>
+                <br>
+                <div class="text-right">
+                     </div>
+                       
+                </div>
+                
+                <br>
+                </div>
+                </div>
+                </div>
+              </div>
+            </form>
+  <?php endforeach;?>
+  <?php } ?>
+
+<!-- End Modal -->
+
+
+<!-- Footer -->
+<?=$footer;?>
+<!-- End Footer-->
+
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="<?php echo base_url()?>assets2/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>

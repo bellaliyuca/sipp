@@ -1,0 +1,9 @@
+
+/* menyembunyikan tombol aksi */
+.action {
+	display: none;
+}
+
+/* memberikan border pada tabel */
+.table { border-right: 1px solid black; border-bottom: 1px solid black; }
+.table th, .table td { border-left: 1px solid black; border-top: 1px solid black; padding: 3px; font-size: 12px}
